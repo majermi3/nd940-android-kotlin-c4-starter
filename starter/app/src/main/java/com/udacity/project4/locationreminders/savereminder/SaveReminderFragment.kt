@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import com.google.android.gms.maps.model.LatLng
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSaveReminderBinding
+import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 
@@ -20,13 +22,19 @@ class SaveReminderFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_save_reminder, container, false)
 
         setDisplayHomeAsUpEnabled(true)
 
         binding.viewModel = _viewModel
+
+        val latLng = arguments?.getParcelable<LatLng>(getString(R.string.arg_lat_lng))
+        latLng?.let {
+            _viewModel.latitude.value = it.latitude
+            _viewModel.longitude.value = it.longitude
+        }
 
         return binding.root
     }
@@ -42,10 +50,14 @@ class SaveReminderFragment : BaseFragment() {
 
         binding.saveReminder.setOnClickListener {
             val title = _viewModel.reminderTitle.value
-            val description = _viewModel.reminderDescription
+            val description = _viewModel.reminderDescription.value
             val location = _viewModel.reminderSelectedLocationStr.value
-            val latitude = _viewModel.latitude
+            val latitude = _viewModel.latitude.value
             val longitude = _viewModel.longitude.value
+
+            _viewModel.saveReminder(ReminderDataItem(
+                title, description, location, latitude, longitude
+            ))
 
 //            TODO: use the user entered reminder details to:
 //             1) add a geofencing request

@@ -30,12 +30,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.BuildConfig
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
+import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
-import java.util.*
-
 
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
@@ -79,19 +78,24 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         supportFragmentManager.getMapAsync(this)
 
 //        TODO: add style to the map
-//        TODO: put a marker to location that the user selected
 
 
-//        TODO: call this function after the user confirms on the selected location
-        onLocationSelected()
+        binding.saveButton.setOnClickListener {
+            if (selectedLocationMarker == null) {
+                _viewModel.showToast.value = getString(R.string.select_poi)
+            } else {
+                onLocationSelected()
+            }
+        }
 
         return binding.root
     }
 
     private fun onLocationSelected() {
-        //        TODO: When the user confirms on the selected location,
-        //         send back the selected location details to the view model
-        //         and navigate back to the previous fragment to save the reminder and add the geofence
+        _viewModel.navigationCommand.value =
+            NavigationCommand.To(SelectLocationFragmentDirections.actionSelectLocationFragmentToSaveReminderFragment(
+                selectedLocationMarker!!.position
+            ))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
