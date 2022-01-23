@@ -24,6 +24,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.BuildConfig
 import com.udacity.project4.R
@@ -32,6 +34,7 @@ import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
+import java.util.*
 
 
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
@@ -52,6 +55,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentSelectLocationBinding
 
     private lateinit var map: GoogleMap
+    private var selectedLocationMarker: Marker? = null
     private var lastKnownLocation: Location? = null
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -154,7 +158,38 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         map = googleMap
         map.uiSettings.isZoomControlsEnabled = true
 
+        setPoiClick()
+        setMapLongClick()
+
         checkPermissionsAndSetCurrentLocation()
+    }
+
+    private fun setPoiClick() {
+        map.setOnPoiClickListener { poi ->
+            setSelectedLocationMarker(poi.latLng, poi.name)
+        }
+    }
+
+    private fun setMapLongClick() {
+        map.setOnMapLongClickListener { latLng ->
+            setSelectedLocationMarker(latLng, getString(R.string.dropped_pin))
+        }
+    }
+
+    private fun setSelectedLocationMarker(latLng: LatLng, title: String?) {
+        if (selectedLocationMarker == null) {
+            selectedLocationMarker = map.addMarker(
+                MarkerOptions()
+                    .position(latLng)
+                    .title(title)
+            )
+        } else {
+            selectedLocationMarker?.apply {
+                this.position = latLng
+                this.title = title
+            }
+        }
+        selectedLocationMarker?.showInfoWindow()
     }
 
     private fun checkPermissionsAndSetCurrentLocation() {
