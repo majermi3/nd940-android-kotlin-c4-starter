@@ -41,6 +41,9 @@
             <argument
                 android:name="latLng"
                 app:argType="com.google.android.gms.maps.model.LatLng" />
+            <argument
+                android:name="title"
+                app:argType="string" />
         </action>
     </fragment>
 

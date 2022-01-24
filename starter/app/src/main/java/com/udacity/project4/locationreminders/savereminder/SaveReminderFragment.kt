@@ -58,10 +58,12 @@ class SaveReminderFragment : BaseFragment() {
 
         binding.viewModel = _viewModel
 
-        val latLng = arguments?.getParcelable<LatLng>(getString(R.string.arg_lat_lng))
-        latLng?.let {
+        arguments?.getParcelable<LatLng>(getString(R.string.arg_lat_lng))?.let {
             _viewModel.latitude.value = it.latitude
             _viewModel.longitude.value = it.longitude
+        }
+        arguments?.getString(getString(R.string.arg_title))?.let {
+            _viewModel.reminderSelectedLocationStr.value = it
         }
 
         return binding.root
