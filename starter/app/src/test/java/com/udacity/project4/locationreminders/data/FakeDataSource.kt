@@ -7,8 +7,6 @@ import java.util.LinkedHashMap
 //Use FakeDataSource that acts as a test double to the LocalDataSource
 class FakeDataSource(var reminders: LinkedHashMap<String, ReminderDTO> = LinkedHashMap() ) : ReminderDataSource {
 
-//    TODO: Create a fake data source to act as a double to the real data source
-
     override suspend fun getReminders(): Result<List<ReminderDTO>> {
         if (reminders.isEmpty()) return Result.Error("No Data")
         return Result.Success(reminders.values.toList())
