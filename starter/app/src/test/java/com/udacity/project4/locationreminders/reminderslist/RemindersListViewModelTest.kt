@@ -6,11 +6,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.LinkedHashMap
 import org.hamcrest.Matchers.*
+import org.junit.After
+import org.junit.Before
+import org.koin.core.context.stopKoin
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
@@ -26,9 +30,8 @@ class RemindersListViewModelTest {
     private lateinit var dataSource: FakeDataSource
     private lateinit var reminderListViewModel: RemindersListViewModel
 
-    @Test
-    fun loadReminders_setsReminderList() {
-        // When reminders are added to the list
+    @Before
+    fun init() {
         reminders[reminder1.id] = reminder1
         reminders[reminder2.id] = reminder2
         reminders[reminder3.id] = reminder3
@@ -38,7 +41,11 @@ class RemindersListViewModelTest {
             ApplicationProvider.getApplicationContext(),
             dataSource
         )
-        // Then loadReminders is called
+    }
+
+    @Test
+    fun loadReminders_setsReminderList() {
+        // When loadReminders is called
         reminderListViewModel.loadReminders()
 
         // Verify that reminderList has correct data and there is no error
@@ -69,18 +76,19 @@ class RemindersListViewModelTest {
     }
 
     @Test
-    fun loadReminders_withEmptyData_ShowSnackBarHasErrorNoData() {
-        // When no reminders are added to the list
-        dataSource = FakeDataSource(reminders)
-        reminderListViewModel = RemindersListViewModel(
-            ApplicationProvider.getApplicationContext(),
-            dataSource
-        )
+    fun loadReminders_withEmptyData_ShowSnackBarHasErrorNoData() = runBlockingTest {
+        // When reminders are removed from the list
+        dataSource.deleteAllReminders()
 
         // Then loadReminders is called
         reminderListViewModel.loadReminders()
 
         // Verify that error massage is in the snackBar
         assertThat(reminderListViewModel.showSnackBar.value, `is`("No Data"))
+    }
+
+    @After
+    fun tearDown() {
+        stopKoin()
     }
 }
