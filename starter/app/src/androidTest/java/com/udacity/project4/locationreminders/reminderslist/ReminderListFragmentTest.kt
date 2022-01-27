@@ -42,6 +42,8 @@ class ReminderListFragmentTest : KoinTest {
     private lateinit var repository: ReminderDataSource
 
     @Before fun initialize() {
+        stopKoin()
+
         val myModule = module {
             // define your module for test here
             viewModel {
@@ -71,7 +73,6 @@ class ReminderListFragmentTest : KoinTest {
     @ExperimentalCoroutinesApi
     fun tearDown() = runBlockingTest {
         repository.deleteAllReminders()
-        stopKoin()
     }
 
     @Test
