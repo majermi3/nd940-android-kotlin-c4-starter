@@ -26,6 +26,7 @@ class ReminderDescriptionActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityReminderDescriptionBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(
@@ -33,6 +34,13 @@ class ReminderDescriptionActivity : AppCompatActivity() {
             R.layout.activity_reminder_description
         )
 
-//        TODO: Add the implementation of the reminder details
+        val reminderDataItem = intent.getSerializableExtra(EXTRA_ReminderDataItem) as ReminderDataItem
+
+        binding.reminderDataItem = reminderDataItem
+        binding.latLng = getString(
+            R.string.lat_long_snippet,
+            reminderDataItem.latitude,
+            reminderDataItem.longitude
+        )
     }
 }

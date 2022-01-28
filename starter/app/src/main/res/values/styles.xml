@@ -13,4 +13,10 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="reminder_label">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
