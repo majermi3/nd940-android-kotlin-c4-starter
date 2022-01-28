@@ -77,9 +77,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         val supportFragmentManager = childFragmentManager.findFragmentById(R.id.save_reminder_map) as SupportMapFragment
         supportFragmentManager.getMapAsync(this)
 
-//        TODO: add style to the map
-
-
         binding.saveButton.setOnClickListener {
             if (selectedLocationMarker == null) {
                 _viewModel.showToast.value = getString(R.string.select_poi)
