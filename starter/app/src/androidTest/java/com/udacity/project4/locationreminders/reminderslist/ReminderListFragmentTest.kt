@@ -83,6 +83,17 @@ class ReminderListFragmentTest : KoinTest {
     @ExperimentalCoroutinesApi
     fun tearDown() = runBlockingTest {
         repository.deleteAllReminders()
+        Intents.release()
+    }
+
+    @Test
+    fun noDataMessage_isVisible() {
+        // GIVEN - No data
+        // WHEN - List fragment is launched
+        launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+
+        // Then the no data massage is displayed
+        onView(withId(R.id.noDataTextView)).check(matches(isDisplayed()))
     }
 
     @Test
