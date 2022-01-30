@@ -1,10 +1,8 @@
 package com.udacity.project4.locationreminders.reminderslist
 
-import android.content.ComponentName
 import android.os.Bundle
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.InstrumentationRegistry.getTargetContext
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
@@ -18,7 +16,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.udacity.project4.MyApp
 import com.udacity.project4.R
-import com.udacity.project4.base.DataBindingViewHolder
 import com.udacity.project4.locationreminders.ReminderDescriptionActivity
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
@@ -45,8 +42,6 @@ import org.koin.test.KoinTest
 //UI Testing
 @MediumTest
 class ReminderListFragmentTest : KoinTest {
-
-//    TODO: add testing for the error messages.
 
     private lateinit var repository: ReminderDataSource
 
