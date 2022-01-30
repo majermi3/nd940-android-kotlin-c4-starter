@@ -151,8 +151,8 @@ class RemindersActivityTest :
         onView(withId(R.id.saveReminder)).perform(click())
 
         // Verify that success Toast was displayed
-        onView(allOf(withId(R.id.snackbar_text), withText(appContext.getString(R.string.err_enter_title))))
-                .check(matches(isDisplayed()));
+        onView(withId(R.id.snackbar_text))
+                .check(matches(withText(appContext.getString(R.string.err_enter_title))))
 
         activityScenario.close()
     }
