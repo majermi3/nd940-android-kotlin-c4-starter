@@ -6,6 +6,7 @@ import android.annotation.TargetApi
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
@@ -162,6 +164,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
         setPoiClick()
         setMapLongClick()
+        setMapStyle()
 
         checkPermissionsAndSetCurrentLocation()
     }
@@ -175,6 +178,20 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private fun setMapLongClick() {
         map.setOnMapLongClickListener { latLng ->
             setSelectedLocationMarker(latLng, getString(R.string.dropped_pin))
+        }
+    }
+
+    private fun setMapStyle() {
+        try {
+            val success = map.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+                    requireContext(),
+                    R.raw.map_style
+            ))
+            if (!success) {
+                Log.e(TAG, "Style parsing failed")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Log.e(TAG, "Style file not found")
         }
     }
 
